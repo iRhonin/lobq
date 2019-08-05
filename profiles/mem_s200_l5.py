@@ -9,6 +9,7 @@ from profiles import generate_lob_data
 
 data = generate_lob_data(appends=1500, levels=5)
 
+print('Running memory profile for queue size of 200')
 
 def total_usage(snapshot, key_type='lineno'):
     snapshot = snapshot.filter_traces((
@@ -44,14 +45,12 @@ lobq()
 snapshot = tracemalloc.take_snapshot()
 tracemalloc.stop()
 lobq_mem = total_usage(snapshot)
-print(lobq_mem)
 
 tracemalloc.start()
 python_queue()
 snapshot = tracemalloc.take_snapshot()
 tracemalloc.stop()
 python_mem = total_usage(snapshot)
-print(python_mem)
 print(f'Python queue use {python_mem / lobq_mem:.2f}x more memory')
 
 tracemalloc.start()
