@@ -29,4 +29,5 @@ setup(
     install_requires=dependencies,
     packages=find_packages(),
     ext_modules=extensions,
+    test_suit='sad.tests',
 )

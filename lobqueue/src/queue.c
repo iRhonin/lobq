@@ -99,9 +99,9 @@ Queue_append(QueueObject *self, PyObject *args, PyObject *kwds)
 		self->tail = modulo(self->tail + 1, self->capacity);
 	}
 
-	self->head = modulo(self->head + 1, self->capacity);
-	self->ob_item[self->head] = Py_None;
-    if (!PyArg_ParseTuple(args, "O", self->ob_item[self->head]))
+    self->head = modulo(self->head + 1, self->capacity);
+    self->ob_item[self->head] = Py_None;
+    if (!PyArg_ParseTuple(args, "O", &self->ob_item[self->head]))
 		return -1;
 
 	return Py_BuildValue("O", self->ob_item[self->head]);
@@ -110,14 +110,25 @@ Queue_append(QueueObject *self, PyObject *args, PyObject *kwds)
 static PyObject *
 Queue_peek(QueueObject *self, PyObject *args, PyObject *kwds)
 {
-	PyObject *time;
+	char *time = 0;
     static char *kwlist[] = {"time", NULL};
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "s", kwlist, 
-		time)
+		&time)
 	) 
-		return -1;
+		return NULL;
 
-	return time;
+	for(
+		Py_ssize_t i = self->tail;
+		i <= self->head;
+		i = modulo(i + 1, self->capacity)
+	) {
+		if(!strcmp(
+			PyUnicode_AsUTF8(PyDict_GetItemString(self->ob_item[i], "time")),
+			time)
+		  )
+			return Py_BuildValue("O", self->ob_item[i]);
+	}
+	return Py_BuildValue("O", Py_None);
 }
 
 static PyObject *
