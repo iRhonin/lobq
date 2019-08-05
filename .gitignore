@@ -114,3 +114,8 @@ data
 *.swo
 *~
 
+# Auto generated files
+*.dat
+
+# Profile
+*.prof*
