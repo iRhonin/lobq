@@ -18,9 +18,12 @@ def test_peek():
         ask_vol=[2],
         ask_pr=[2],
     )
+    import pudb; pudb.set_trace()  # XXX BREAKPOINT
+    assert q.append(lob1) == lob1
+    assert q.append(lob2) == lob2
 
-    print(q.append(lob1))
-    print(q.append(lob2))
+    assert q[0] == lob2
+    assert q[1] == lob1
 
     peeked = q.peek('1')
     assert peeked == lob1
@@ -30,3 +33,5 @@ def test_peek():
 
     peeked = q.peek('none')
     assert peeked is None
+
+test_peek()

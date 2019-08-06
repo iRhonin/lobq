@@ -16,7 +16,7 @@ modulo(int a, int b) {
 typedef struct {
 	PyObject_HEAD
 	int capacity;
-	PyObject **ob_item;
+	PyObject *ob_item;
 	int head;
 	int tail;
 } QueueObject;
@@ -69,7 +69,10 @@ Queue_init(QueueObject *self, PyObject *args, PyObject *kwds)
 			&self->capacity))
         return NULL;
 
-	self->ob_item = (PyObject*) malloc(self->capacity * sizeof(PyObject*));
+	self->ob_item = PyTuple_New(self->capacity);
+ 	if(!self->ob_item)
+		return -1;
+
     return 0;
 }
 
@@ -93,41 +96,57 @@ Queue_size(QueueObject *self)
 static PyObject *
 Queue_append(QueueObject *self, PyObject *args, PyObject *kwds)
 {
+//	assert(args != NULL);
+//    if (!PyTuple_Check(args)) {
+//        PyErr_SetString(PyExc_SystemError,
+//            "Only lists are acceptable");
+//		return NULL;//Py_BuildValue("O", &argc);
+//    }
+//
 	if(Queue_size(self) == self->capacity)
 	{
-		Py_DECREF(self->ob_item[self->tail]);
 		self->tail = modulo(self->tail + 1, self->capacity);
 	}
 
+	Py_ssize_t argc = PyTuple_GET_SIZE(args);  
+	assert(argc == 1);
     self->head = modulo(self->head + 1, self->capacity);
-    self->ob_item[self->head] = Py_None;
-    if (!PyArg_ParseTuple(args, "O", &self->ob_item[self->head]))
-		return -1;
-
-	return Py_BuildValue("O", self->ob_item[self->head]);
+	PyObject * new_item = *((PyTupleObject *)args)->ob_item;
+	Py_INCREF(new_item);
+	PyTuple_SetItem(self->ob_item, self->head, new_item);
+	//*self->ob_item[self->head] = malloc(sizeof(PyObject));
+//    if (!PyArg_ParseTuple(args, "O", self->ob_item[self->head]))
+		//return NULL;//Py_BuildValue("O", &argc);
+	//	return -1;
+	
+		return Py_BuildValue("O", Py_None);
+	return Py_BuildValue("O", PyTuple_GetItem(self->ob_item, self->head));
 }
 
 static PyObject *
 Queue_peek(QueueObject *self, PyObject *args, PyObject *kwds)
 {
-	char *time = 0;
-    static char *kwlist[] = {"time", NULL};
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "s", kwlist, 
-		&time)
-	) 
-		return NULL;
-
-	for(
-		Py_ssize_t i = self->tail;
-		i <= self->head;
-		i = modulo(i + 1, self->capacity)
-	) {
-		if(!strcmp(
-			PyUnicode_AsUTF8(PyDict_GetItemString(self->ob_item[i], "time")),
-			time)
-		  )
-			return Py_BuildValue("O", self->ob_item[i]);
-	}
+//	char *time = 0;
+//    static char *kwlist[] = {"time", NULL};
+//    if (!PyArg_ParseTupleAndKeywords(args, kwds, "s", kwlist, 
+//		time)
+//	) 
+//		return NULL;
+//
+//	for(
+//		Py_ssize_t i = self->tail;
+//		i <= self->head;
+//		i = modulo(i + 1, self->capacity)
+//	) {
+//		//if(!PyDict_Check(self->ob_item[i]))
+//		//	return NULL;
+//
+//		if(!strcmp(
+//			PyUnicode_AsUTF8(PyDict_GetItemString(self->ob_item[i], "time")),
+//			time)
+//		  )
+//			return Py_BuildValue("O", &self->ob_item[i]);
+//	}
 	return Py_BuildValue("O", Py_None);
 }
 
@@ -141,7 +160,7 @@ Queue_item(QueueObject *self, Py_ssize_t i)
 	}
 
 	i = modulo(self->head - i, self->capacity);
-	return Py_BuildValue("O", self->ob_item[i]);
+	return Py_BuildValue("O", PyTuple_GetItem(self->ob_item, i));
 }
 
 static Py_ssize_t 

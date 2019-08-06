@@ -3,6 +3,7 @@ from distutils.core import setup, Extension
 from os.path import join, dirname
 
 from setuptools import find_packages
+from Cython.Build import build_ext
 
 
 # reading package version (same way the sqlalchemy does)
@@ -17,10 +18,12 @@ extensions = [
         'fastqueue',
         ['lobqueue/src/queue.c'],
     ),
+    Extension("cyq", ["cyq/cyq.pyx"])
 ]
 
 dependencies = [
     'numpy',
+    'cython',
 ]
 
 setup(
@@ -28,6 +31,7 @@ setup(
     version=package_version,
     install_requires=dependencies,
     packages=find_packages(),
+    cmdclass = {'build_ext': build_ext},
     ext_modules=extensions,
     test_suit='sad.tests',
 )
