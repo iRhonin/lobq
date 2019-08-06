@@ -15,10 +15,13 @@ with open(join(dirname(__file__), 'lobqueue', '__init__.py')) as v_file:
 
 extensions = [
     Extension(
-        'fastqueue',
-        ['lobqueue/src/queue.c'],
+        'lobq',
+        ['lobq/lobq.c'],
     ),
-    Extension("cyq", ["cyq/cyq.pyx"])
+    Extension(
+        "cyq",
+        ["cyq/cyq.pyx"]
+    )
 ]
 
 dependencies = [
@@ -34,4 +37,5 @@ setup(
     cmdclass = {'build_ext': build_ext},
     ext_modules=extensions,
     test_suit='sad.tests',
+    extra_compile_args = ["-O0"],
 )
