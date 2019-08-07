@@ -103,38 +103,3 @@ def profile(q_size, data_size, levels, runs=10):
 
     return results
 
-#    res = profile_func(lobq, 'C_API', q_size, data_size, levels, runs)
-#    results = results.append(res, ignore_index=True)
-#
-#    # Profiling Compiled Python
-#    def cython():
-#        q = CyQueue(q_size)
-#        for item in data:
-#            q.append(item)
-#
-#    t_cython = timeit.Timer(cython).timeit(10)
-#    print(f'CompiledPython: {t_cython / t_lobq:.2f}x slower')
-#
-#
-#    # Profiling python queue
-#    def python_queue():
-#        q = Queue(q_size)
-#        for item in data:
-#            if(q.full()):
-#                q.get()
-#            q.put(item)
-#
-#    t = timeit.Timer(python_queue).timeit(10)
-#    print(f'Python Builtin Queue: {t / t_lobq:.2f}x slower')
-#
-#
-#    def numpy_queue():
-#        q = NumpyQueue(q_size)
-#        for item in data:
-#           q.append(item)
-#
-#    t = timeit.Timer(numpy_queue).timeit(10)
-#    print(f'Numpy: {t / t_lobq:.2f}x slower')
-
-# Profiling LobQ C implemention
-
