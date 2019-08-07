@@ -16,7 +16,7 @@ modulo(int a, int b) {
 typedef struct {
     PyObject_HEAD
     int cap;
-    PyObject *ob_item;
+    PyTupleObject *ob_item;
     int head;
     int tail;
 } LobQ;
@@ -29,8 +29,6 @@ valid_index(Py_ssize_t i, Py_ssize_t limit)
     return (size_t) i < (size_t) limit;
 }
 
-
-
 static int
 LobQ_clear(LobQ *self)
 {
@@ -40,9 +38,8 @@ LobQ_clear(LobQ *self)
 static void
 LobQ_dealloc(LobQ *self)
 {
-    PyObject_GC_UnTrack(self);
-    LobQ_clear(self);
-    Py_TYPE(self)->tp_free((PyObject *) self);
+     Py_CLEAR(self->ob_item);
+     Py_TYPE(self)->tp_free(self);
 }
 
 static PyObject *
@@ -62,9 +59,9 @@ LobQ_init(LobQ *self, PyObject *args, PyObject *kwds)
     static char *kwlist[] = {"cap", NULL};
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "i", kwlist, 
             &self->cap))
-        return NULL;
+        return 0;
 
-    self->ob_item = PyTuple_New(self->cap);
+    self->ob_item = (PyObject*) PyTuple_New(self->cap);
     if(!self->ob_item)
         return -1;
 
@@ -98,35 +95,38 @@ LobQ_item(LobQ *self, Py_ssize_t i)
     }
 
     i = modulo(self->head - i, self->cap);
-    printf("i: %d\n", i);
     return Py_BuildValue("O", PyTuple_GetItem(self->ob_item, i));
 }
 
 static int
 LobQ_traverse(LobQ *self, visitproc visit, void *arg)
 {
-    Py_ssize_t i;
-
-    for (i = LobQ_size(self); --i > 0; )
-        Py_VISIT(self->ob_item[i]);
+    Py_VISIT(self->ob_item);
     return 0;    
 }
 
 static PyObject *
-LobQ_append(LobQ *self, PyObject *args, PyObject *kwds)
+LobQ_append(LobQ *self, PyObject *args)
 {
+    if(!PyTuple_Check(args) || PyTuple_Size(args) != 1)
+    {
+        PyErr_SetString(PyExc_TypeError, "You can only pass a signle object");
+        return NULL;
+    }
+    
     if(LobQ_size(self) == self->cap)
     {
-        Py_DECREF(LobQ_item(self, 1));
+        Py_XDECREF(LobQ_item(self, self->tail));
         self->tail = modulo(self->tail + 1, self->cap);
     }
 
-    Py_ssize_t argc = PyTuple_GET_SIZE(args);  
-    assert(argc == 1);
     self->head = modulo(self->head + 1, self->cap);
+    Py_ssize_t index = self->head;
+
     PyObject * new_item = *((PyTupleObject *)args)->ob_item;
     Py_INCREF(new_item);
-    PyTuple_SetItem(self->ob_item, self->head, new_item);
+
+    PyTuple_SetItem(self->ob_item, index, new_item);
     return Py_BuildValue("O", Py_None);
 }
 
@@ -139,6 +139,7 @@ LobQ_peek(LobQ *self, PyObject *args, PyObject *kwds)
         &time)
     ) 
         return NULL;
+
     for(Py_ssize_t i = LobQ_size(self);	--i >= 0;) 
     {
         //if(!PyDict_Check(self->ob_item[i]))
@@ -171,7 +172,7 @@ LobQ_echo(LobQ *self, PyObject *args)
 }
 
 static PyMethodDef LobQ_methods[] = {
-    {"append", (PyCFunctionWithKeywords) LobQ_append, METH_VARARGS | METH_KEYWORDS},
+    {"append", (PyCFunctionWithKeywords) LobQ_append, METH_VARARGS},
     {"peek", (PyCFunctionWithKeywords) LobQ_peek, METH_VARARGS | METH_KEYWORDS},
     {"echo", (PyCFunction) LobQ_echo, METH_VARARGS},
     {NULL}  /* Sentinel */
@@ -220,6 +221,9 @@ PyInit_lobq(void)
     Py_INCREF(&LobQType);
     PyModule_AddObject(m, "LobQ", (PyObject *) &LobQType);
 
+    if (!PyEval_ThreadsInitialized())
+        PyEval_InitThreads();
+    
     return m;
 }
 

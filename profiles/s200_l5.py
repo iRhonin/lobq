@@ -63,7 +63,7 @@ def python_queue():
         q.put(item)
 
 t = timeit.Timer(python_queue).timeit(10)
-print(f'Bultin: {t / t_lobq:.2f}x slower')
+print(f'Python Builtin Queue: {t / t_lobq:.2f}x slower')
 
 
 def numpy_queue():

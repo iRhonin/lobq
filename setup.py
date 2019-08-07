@@ -26,7 +26,9 @@ extensions = [
 
 dependencies = [
     'numpy',
+    'pandas',
     'cython',
+    'jupyterlab',
 ]
 
 setup(
