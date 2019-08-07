@@ -38,7 +38,7 @@ LobQ_clear(LobQ *self)
 static void
 LobQ_dealloc(LobQ *self)
 {
-     Py_CLEAR(self->ob_item);
+     Py_TYPE(self->ob_item)->tp_free(self->ob_item);
      Py_TYPE(self)->tp_free(self);
 }
 

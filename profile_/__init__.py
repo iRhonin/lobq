@@ -1,4 +1,5 @@
 import timeit
+import tracemalloc
 from datetime import datetime
 from functools import partial
 from random import random
@@ -24,6 +25,7 @@ def generate_lob_data(size, levels):
 
 
 def profile_func(fn, type_, q_size, data_size, levels, runs):
+
     time = timeit.Timer(fn).timeit(runs) / runs
 
     result = pd.DataFrame(dict(
@@ -37,7 +39,6 @@ def profile_func(fn, type_, q_size, data_size, levels, runs):
     ))
 
     return result
-
 
 
 def profile(q_size, data_size, levels, runs=10):
@@ -55,8 +56,6 @@ def profile(q_size, data_size, levels, runs=10):
         q = PythonQueue(q_size)
         for item in data:
             q.append(item)
-
-
 
     # Compiled Python
     from cyq import Queue as CyQueue # Compiled by cython
