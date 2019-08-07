@@ -1,6 +1,11 @@
 
 # Profile
 
+## Run profile.py
+`python3 profile_/profile.py`
+
+## Results
+
 ### Importing things and profile function
 
 

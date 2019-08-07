@@ -59,7 +59,7 @@ def test_lobq_multithread():
             assert q.peek(lob['time']) == lob
 
     threads = []
-    for i in range(10000):
+    for i in range(100):
         t = threading.Thread(target=append_and_peek)
         threads.append(t)
 
@@ -81,5 +81,6 @@ def test_lobq_api():
 
 
 test_lobq()
-# test_lobq_multithread()
+test_lobq_multithread()
 test_lobq_api()
+

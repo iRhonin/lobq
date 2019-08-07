@@ -29,6 +29,9 @@ dependencies = [
     'pandas',
     'cython',
     'jupyterlab',
+
+    # For running tests
+    'pytest',
 ]
 
 setup(
