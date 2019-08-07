@@ -1,5 +1,5 @@
 
-# Profile
+# Profile and Benchmark
 
 ## Run profile.py
 `python3 profile_/profile.py`
@@ -20,7 +20,7 @@ from profile_ import profile
 
 
 ```python
-result = profile(q_size=10, data_size=1500, levels=5, runs=1000)
+result = profile(q_size=10, data_size=1500, levels=5, runs=100)
 result['scaled_time'] = result['time'] / min(result['time'])
 result = result.sort_values('scaled_time')
 result
@@ -29,7 +29,7 @@ result
 
 
 
-
+<div>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -48,57 +48,57 @@ result
     <tr>
       <th>0</th>
       <td>C API</td>
-      <td>0.000189</td>
-      <td>1.257244e-07</td>
+      <td>0.000166</td>
+      <td>1.108109e-07</td>
       <td>10</td>
       <td>1500</td>
       <td>5</td>
-      <td>1000</td>
+      <td>100</td>
       <td>1.000000</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Cython</td>
-      <td>0.000629</td>
-      <td>4.193318e-07</td>
+      <td>0.000592</td>
+      <td>3.944243e-07</td>
       <td>10</td>
       <td>1500</td>
       <td>5</td>
-      <td>1000</td>
-      <td>3.335325</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Pure Python</td>
-      <td>0.000945</td>
-      <td>6.299842e-07</td>
-      <td>10</td>
-      <td>1500</td>
-      <td>5</td>
-      <td>1000</td>
-      <td>5.010834</td>
+      <td>100</td>
+      <td>3.559437</td>
     </tr>
     <tr>
       <th>4</th>
       <td>Numpy</td>
-      <td>0.000988</td>
-      <td>6.587908e-07</td>
+      <td>0.001077</td>
+      <td>7.180260e-07</td>
       <td>10</td>
       <td>1500</td>
       <td>5</td>
-      <td>1000</td>
-      <td>5.239959</td>
+      <td>100</td>
+      <td>6.479744</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Pure Python</td>
+      <td>0.001078</td>
+      <td>7.185063e-07</td>
+      <td>10</td>
+      <td>1500</td>
+      <td>5</td>
+      <td>100</td>
+      <td>6.484078</td>
     </tr>
     <tr>
       <th>3</th>
       <td>Builtin Queue</td>
-      <td>0.008946</td>
-      <td>5.964163e-06</td>
+      <td>0.009693</td>
+      <td>6.461801e-06</td>
       <td>10</td>
       <td>1500</td>
       <td>5</td>
-      <td>1000</td>
-      <td>47.438389</td>
+      <td>100</td>
+      <td>58.313792</td>
     </tr>
   </tbody>
 </table>
@@ -162,8 +162,8 @@ result
     <tr>
       <th>0</th>
       <td>C API</td>
-      <td>0.000193</td>
-      <td>1.289897e-07</td>
+      <td>0.000166</td>
+      <td>1.103532e-07</td>
       <td>200</td>
       <td>1500</td>
       <td>5</td>
@@ -173,46 +173,46 @@ result
     <tr>
       <th>2</th>
       <td>Cython</td>
-      <td>0.000513</td>
-      <td>3.422819e-07</td>
+      <td>0.000572</td>
+      <td>3.814821e-07</td>
       <td>200</td>
       <td>1500</td>
       <td>5</td>
       <td>100</td>
-      <td>2.653559</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Pure Python</td>
-      <td>0.000841</td>
-      <td>5.607256e-07</td>
-      <td>200</td>
-      <td>1500</td>
-      <td>5</td>
-      <td>100</td>
-      <td>4.347056</td>
+      <td>3.456919</td>
     </tr>
     <tr>
       <th>4</th>
       <td>Numpy</td>
-      <td>0.000937</td>
-      <td>6.246372e-07</td>
+      <td>0.000909</td>
+      <td>6.060601e-07</td>
       <td>200</td>
       <td>1500</td>
       <td>5</td>
       <td>100</td>
-      <td>4.842534</td>
+      <td>5.492003</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Pure Python</td>
+      <td>0.001050</td>
+      <td>7.002741e-07</td>
+      <td>200</td>
+      <td>1500</td>
+      <td>5</td>
+      <td>100</td>
+      <td>6.345752</td>
     </tr>
     <tr>
       <th>3</th>
       <td>Builtin Queue</td>
-      <td>0.008379</td>
-      <td>5.586129e-06</td>
+      <td>0.008653</td>
+      <td>5.768911e-06</td>
       <td>200</td>
       <td>1500</td>
       <td>5</td>
       <td>100</td>
-      <td>43.306771</td>
+      <td>52.276786</td>
     </tr>
   </tbody>
 </table>
@@ -243,3 +243,8 @@ ax.invert_yaxis()
 
 ![png](notebook/output_8_0.png)
 
+
+
+```python
+
+```

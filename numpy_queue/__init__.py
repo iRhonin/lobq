@@ -9,12 +9,12 @@ class Queue:
         self.tail = 0
 
     def __len__(self):
-        if(self.head == -1):
-            return 0;
-        elif(self.head >= self.tail):
-            return self.head - self.tail + 1;
+        if self.head == -1:
+            return 0
+        elif self.head >= self.tail:
+            return self.head - self.tail + 1
         else:
-            return self.capacity;
+            return self.capacity
 
     def __getitem__(self, i):
         return self.queue[(self.head - i) % self.cap]
@@ -28,4 +28,3 @@ class Queue:
             self.tail %= self.cap
 
         self.queue[self.head] = item
-

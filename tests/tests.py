@@ -10,13 +10,7 @@ def test_lobq():
     lobs = []
 
     for i in range(3 * q.cap):
-        lob = dict(
-            time=f'{i}',
-            bid_vol=[1],
-            bid_pr=[1],
-            ask_vol=[1],
-            ask_pr=[1],
-        )
+        lob = dict(time=f'{i}', bid_vol=[1], bid_pr=[1], ask_vol=[1], ask_pr=[1])
 
         refs = getrefcount(lob)
         q.append(lob)
@@ -34,23 +28,18 @@ def test_lobq():
     peeked = q.peek('None')
     assert peeked is None
 
-    del(lobs)
-    del(q)
+    del lobs
+    del q
 
 
 def test_lobq_multithread():
     import threading
 
     q = Queue(2)
+
     def append_and_peek():
         for i in range(3 * q.cap):
-            lob = dict(
-                time=f'{i}',
-                bid_vol=[1],
-                bid_pr=[1],
-                ask_vol=[1],
-                ask_pr=[1],
-            )
+            lob = dict(time=f'{i}', bid_vol=[1], bid_pr=[1], ask_vol=[1], ask_pr=[1])
 
             refs = getrefcount(lob)
             q.append(lob)
@@ -77,10 +66,9 @@ def test_lobq_api():
         assert q.append(some_key=0)
 
     with pytest.raises(TypeError):
-        assert q.append(1,2)
+        assert q.append(1, 2)
 
 
 test_lobq()
 test_lobq_multithread()
 test_lobq_api()
-

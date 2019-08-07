@@ -28,15 +28,17 @@ def profile_func(fn, type_, q_size, data_size, levels, runs):
 
     time = timeit.Timer(fn).timeit(runs) / runs
 
-    result = pd.DataFrame(dict(
-        type_=[type_],
-        time=[time],
-        time_per_loop=[time / data_size],
-        q_size=q_size,
-        data_size=[data_size],
-        levels=[levels],
-        runs=[runs],
-    ))
+    result = pd.DataFrame(
+        dict(
+            type_=[type_],
+            time=[time],
+            time_per_loop=[time / data_size],
+            q_size=q_size,
+            data_size=[data_size],
+            levels=[levels],
+            runs=[runs],
+        )
+    )
 
     return result
 
@@ -45,6 +47,7 @@ def profile(q_size, data_size, levels, runs=10):
 
     # C_API
     from lobq import LobQ
+
     def lobq():
         q = LobQ(q_size)
         for item in data:
@@ -52,13 +55,15 @@ def profile(q_size, data_size, levels, runs=10):
 
     # Pure Python
     from pure_python import Queue as PythonQueue
+
     def pure_python():
         q = PythonQueue(q_size)
         for item in data:
             q.append(item)
 
     # Compiled Python
-    from cyq import Queue as CyQueue # Compiled by cython
+    from cyq import Queue as CyQueue  # Compiled by cython
+
     def cython():
         q = CyQueue(q_size)
         for item in data:
@@ -66,19 +71,21 @@ def profile(q_size, data_size, levels, runs=10):
 
     # Builtin queue
     from queue import Queue
+
     def builtin_queue():
         q = Queue(q_size)
         for item in data:
-            if(q.full()):
+            if q.full():
                 q.get()
             q.put(item)
 
     # Numpy queue
     from numpy_queue import Queue as NumpyQueue
+
     def numpy_queue():
         q = NumpyQueue(q_size)
         for item in data:
-           q.append(item)
+            q.append(item)
 
     types = (
         ('C API', lobq),
@@ -88,11 +95,7 @@ def profile(q_size, data_size, levels, runs=10):
         ('Numpy', numpy_queue),
     )
 
-    generate_data = partial(
-        generate_lob_data,
-        size=data_size,
-        levels=levels,
-    )
+    generate_data = partial(generate_lob_data, size=data_size, levels=levels)
 
     results = pd.DataFrame()
 
@@ -102,4 +105,3 @@ def profile(q_size, data_size, levels, runs=10):
         results = results.append(res, ignore_index=True)
 
     return results
-

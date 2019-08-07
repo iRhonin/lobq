@@ -17,7 +17,7 @@ or
 ```
 $ cd lobq/
 $ pip3 install cython  # Can not intall via dependencies
-$ pip3 install .  # Inside a venv; add a sudo before the command for global
+$ pip3 install .  # Add a sudo before the command for global
 instaliation
 ```
 
@@ -47,6 +47,6 @@ len(q)
 
 q.peek(lob_item['time'])
 
-q[0] # Newest item
-q[-1] # Oldest Iitem
+q[0]  # Newest item
+q[-1]  # Oldest Iitem
 ```
