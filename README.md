@@ -22,7 +22,7 @@ $ pip3 install -e .  # Add a sudo before the command for global
 
 ### Tests
 
-`$ pytest -v # -v for verbos log
+`$ pytest -v # -v for verbos log`
 
 
 ### Usage
