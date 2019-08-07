@@ -1,10 +1,15 @@
 import timeit
-import tracemalloc
 from datetime import datetime
 from functools import partial
+from queue import Queue
 from random import random
 
 import pandas as pd
+
+from lobq_profiler.numpy_queue import Queue as NumpyQueue
+from .pure_python import Queue as PythonQueue
+from cyq import Queue as CyQueue  # Compiled by cython
+from lobq import LobQ
 
 
 def genearate_double_random_array(size):
@@ -46,7 +51,6 @@ def profile_func(fn, type_, q_size, data_size, levels, runs):
 def profile(q_size, data_size, levels, runs=10):
 
     # C_API
-    from lobq import LobQ
 
     def lobq():
         q = LobQ(q_size)
@@ -54,7 +58,6 @@ def profile(q_size, data_size, levels, runs=10):
             q.append(item)
 
     # Pure Python
-    from pure_python import Queue as PythonQueue
 
     def pure_python():
         q = PythonQueue(q_size)
@@ -62,7 +65,6 @@ def profile(q_size, data_size, levels, runs=10):
             q.append(item)
 
     # Compiled Python
-    from cyq import Queue as CyQueue  # Compiled by cython
 
     def cython():
         q = CyQueue(q_size)
@@ -70,7 +72,6 @@ def profile(q_size, data_size, levels, runs=10):
             q.append(item)
 
     # Builtin queue
-    from queue import Queue
 
     def builtin_queue():
         q = Queue(q_size)
@@ -80,7 +81,6 @@ def profile(q_size, data_size, levels, runs=10):
             q.put(item)
 
     # Numpy queue
-    from numpy_queue import Queue as NumpyQueue
 
     def numpy_queue():
         q = NumpyQueue(q_size)

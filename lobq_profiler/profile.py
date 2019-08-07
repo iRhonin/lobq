@@ -1,6 +1,6 @@
 import pandas as pd
 
-from profile_ import profile
+from lobq_profiler import profile
 
 
 results = pd.DataFrame()

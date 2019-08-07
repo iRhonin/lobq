@@ -1,10 +1,10 @@
 # Project description
 
 ## Fast Lob Queue
-Implemented in C and complied to achive high performance, 5x time faster
-than [numpy implementation](numpy_queue/__init__.py).
+Implemented in C and complied in order to achive high performance, 5x time faster
+than [numpy implementation](lobq_profiler/numpy_queue/__init__.py).
 
-See [profile documention](profile_/README.md) for more benchmarks.
+See [profile documention](lobq_profiler/README.md) for more benchmarks.
 
 ### Installation (Python >= 3.6)
 
@@ -17,13 +17,12 @@ or
 ```
 $ cd lobq/
 $ pip3 install cython  # Can not intall via dependencies
-$ pip3 install .  # Add a sudo before the command for global
-instaliation
+$ pip3 install -e .  # Add a sudo before the command for global
 ```
 
 ### Tests
 
-`pytest`
+`$ pytest -v # -v for verbos log
 
 
 ### Usage
@@ -48,5 +47,5 @@ len(q)
 q.peek(lob_item['time'])
 
 q[0]  # Newest item
-q[-1]  # Oldest Iitem
+q[-1]  # Oldest item
 ```

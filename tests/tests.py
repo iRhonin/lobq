@@ -69,6 +69,3 @@ def test_lobq_api():
         assert q.append(1, 2)
 
 
-test_lobq()
-test_lobq_multithread()
-test_lobq_api()

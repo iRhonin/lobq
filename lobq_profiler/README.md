@@ -2,7 +2,7 @@
 # Profile and Benchmark
 
 ## Run profile.py
-`python3 profile_/profile.py`
+`python3 lobq_profiler/profile.py`
 
 ## Results
 
@@ -13,7 +13,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from profile_ import profile
+from lobq_profiler import profile
 ```
 
 ### Profiling for Queue size of 10
